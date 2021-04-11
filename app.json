@@ -1,0 +1,12 @@
+{
+  "name": "solutionsTask",
+  "displayName": "solutionsTask",
+  "expo": {
+    "name": "solutionsTask",
+    "slug": "solutionsTask",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

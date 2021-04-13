@@ -40,22 +40,34 @@ class Cam extends PureComponent {
   }
 
   hasAndroidPermission = async () => {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const writeStoragepermission =
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const readStoragepermission =
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
 
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
+    const hasWritePermission = await PermissionsAndroid.check(
+      writeStoragepermission
+    );
+    const hasReadPermission = await PermissionsAndroid.check(
+      readStoragepermission
+    );
+    if (hasWritePermission || hasReadPermission) {
       return true;
     }
 
-    const status = await PermissionsAndroid.request(permission);
-    return status === "granted";
+    const writeStatus = await PermissionsAndroid.request(
+      writeStoragepermission
+    );
+    const readStatus = await PermissionsAndroid.request(readStoragepermission);
+    return writeStatus === "granted" || readStatus === "granted";
   };
 
   savePicture = async (uri) => {
     if (Platform.OS === "android" && !(await this.hasAndroidPermission())) {
       return;
     }
-    CameraRoll.save(uri, { album: "212solutions" })
+
+    await CameraRoll.save(uri, { album: "212solutions" })
       .then((res) => {
         console.log("done", res);
 
@@ -114,7 +126,7 @@ class Cam extends PureComponent {
   };
 
   componentDidMount() {
-    setTimeout(this.takePicture, 1000);
+    setTimeout(this.takePicture, 3000);
   }
 }
 
